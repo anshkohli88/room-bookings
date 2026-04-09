@@ -51,7 +51,7 @@ describe('formatDescription', () => {
 });
 
 describe('isOccupiedToday', () => {
-  const today = new Date('2026-04-08');
+  const today = new Date(2026, 3, 8); // April 8 2026 local midnight — avoids UTC-parse pitfall
   test('event spanning today returns true',           () => expect(isOccupiedToday({ start:'2026-04-05', end:'2026-04-12' }, today)).toBe(true));
   test('checkout day is free (end === today)',         () => expect(isOccupiedToday({ start:'2026-04-05', end:'2026-04-08' }, today)).toBe(false));
   test('future event returns false',                  () => expect(isOccupiedToday({ start:'2026-04-10', end:'2026-04-15' }, today)).toBe(false));
@@ -64,7 +64,14 @@ describe('isOccupiedToday', () => {
 
 describe('toDateStr', () => {
   test('formats date as YYYY-MM-DD', () => {
-    expect(toDateStr(new Date('2026-04-08'))).toBe('2026-04-08');
+    expect(toDateStr(new Date(2026, 3, 8))).toBe('2026-04-08'); // local constructor avoids UTC-parse pitfall
+  });
+  test('uses local time not UTC — critical for IST timezone', () => {
+    // 11:00 PM UTC on Apr 7 = 4:30 AM IST on Apr 8
+    // Local-time methods should return Apr 8 for this date in IST
+    // We simulate by building from local components to avoid env dependency
+    const d = new Date(2026, 3, 8, 4, 30); // April 8 2026 4:30am local
+    expect(toDateStr(d)).toBe('2026-04-08');
   });
 });
 

@@ -1,17 +1,15 @@
 // js/auth.js
 import CONFIG from '../config.js';
 
-const _storage = typeof sessionStorage !== 'undefined' ? sessionStorage : { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-
 let _tokenClient = null;
-let _accessToken = _storage.getItem('gToken') || null;
-let _tokenExpiry  = parseInt(_storage.getItem('gTokenExpiry') || '0');
-let _currentUser  = JSON.parse(_storage.getItem('gUser') || 'null');
+let _accessToken = sessionStorage.getItem('gToken') || null;
+let _tokenExpiry  = parseInt(sessionStorage.getItem('gTokenExpiry') || '0');
+let _currentUser  = JSON.parse(sessionStorage.getItem('gUser') || 'null');
 
 /** Checks if an email is in the allowed list (case-insensitive). */
 export function isEmailAllowed(email, allowedList) {
   if (!email) return false;
-  return allowedList.map(e => e.toLowerCase()).includes(email.toLowerCase());
+  return allowedList.some(e => e.toLowerCase() === email.toLowerCase());
 }
 
 /** Returns true if we have a valid, non-expired access token. */
@@ -59,9 +57,9 @@ export function signOut() {
   _accessToken = null;
   _tokenExpiry = 0;
   _currentUser = null;
-  _storage.removeItem('gToken');
-  _storage.removeItem('gTokenExpiry');
-  _storage.removeItem('gUser');
+  sessionStorage.removeItem('gToken');
+  sessionStorage.removeItem('gTokenExpiry');
+  sessionStorage.removeItem('gUser');
 }
 
 // ---- Private ----
@@ -71,10 +69,10 @@ async function _handleTokenResponse(resp, onSuccess, onError) {
     onError('Sign-in was cancelled or failed. Please try again.');
     return;
   }
+
+  // Store in module vars only (not sessionStorage yet)
   _accessToken = resp.access_token;
   _tokenExpiry = Date.now() + (resp.expires_in * 1000);
-  _storage.setItem('gToken', _accessToken);
-  _storage.setItem('gTokenExpiry', String(_tokenExpiry));
 
   try {
     const userResp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
@@ -83,16 +81,25 @@ async function _handleTokenResponse(resp, onSuccess, onError) {
     const user = await userResp.json();
 
     if (!isEmailAllowed(user.email, CONFIG.ALLOWED_EMAILS)) {
-      signOut();
+      // Revoke without persisting anything
+      if (typeof google !== 'undefined') {
+        google.accounts.oauth2.revoke(_accessToken);
+      }
+      _accessToken = null;
+      _tokenExpiry = 0;
       onError('Access not authorised. Please contact the property manager.');
       return;
     }
 
+    // Only persist to sessionStorage after whitelist check passes
     _currentUser = { name: user.name, email: user.email };
-    _storage.setItem('gUser', JSON.stringify(_currentUser));
+    sessionStorage.setItem('gToken', _accessToken);
+    sessionStorage.setItem('gTokenExpiry', String(_tokenExpiry));
+    sessionStorage.setItem('gUser', JSON.stringify(_currentUser));
     onSuccess(_currentUser);
   } catch {
-    signOut();
+    _accessToken = null;
+    _tokenExpiry = 0;
     onError('Could not verify your account. Please check your internet connection.');
   }
 }
