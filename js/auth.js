@@ -3,8 +3,8 @@ import CONFIG from '../config.js';
 
 let _tokenClient = null;
 let _accessToken = sessionStorage.getItem('gToken') || null;
-let _tokenExpiry  = parseInt(sessionStorage.getItem('gTokenExpiry') || '0');
-let _currentUser  = JSON.parse(sessionStorage.getItem('gUser') || 'null');
+let _tokenExpiry = parseInt(sessionStorage.getItem('gTokenExpiry') || '0');
+let _currentUser = JSON.parse(sessionStorage.getItem('gUser') || 'null');
 
 /** Checks if an email is in the allowed list (case-insensitive). */
 export function isEmailAllowed(email, allowedList) {
@@ -38,7 +38,7 @@ export function initAuth(onSuccess, onError) {
   }
   _tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CONFIG.CLIENT_ID,
-    scope: 'https://www.googleapis.com/auth/calendar',
+    scope: 'https://www.googleapis.com/auth/calendar openid email profile',
     callback: (resp) => _handleTokenResponse(resp, onSuccess, onError),
   });
 }
