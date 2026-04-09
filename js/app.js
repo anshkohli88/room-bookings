@@ -1,5 +1,6 @@
 // js/app.js
-import { isAuthenticated, getCurrentUser, signOut } from './auth.js';
+import { isAuthenticated, getCurrentUser } from './auth.js';
+// signOut is called directly by the home screen header — imported there
 import { fetchAllEvents } from './api.js';
 import { showToast, showLoading, hideLoading } from './ui.js';
 import { renderLogin   } from './screens/login.js';
@@ -9,8 +10,9 @@ import { renderBooking } from './screens/booking.js';
 
 // ---- Global app state ----
 export const state = {
-  user:   null,   // { name, email }
-  events: [],     // Raw Google Calendar event objects
+  user:    null,   // { name, email }
+  events:  [],     // Raw Google Calendar event objects
+  loading: false,
 };
 
 const app = document.getElementById('app');
