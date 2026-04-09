@@ -55,16 +55,20 @@ export function initAuth(onSuccess, onError) {
   });
 }
 
-/** Triggers the Google Sign-In flow, then requests Calendar access. */
-export function signIn() {
+/** Renders the Google identity button into the given container. */
+export function renderGoogleButton(container) {
   if (!_tokenClient || typeof google === 'undefined') {
     throw new Error('Auth not initialised. Call initAuth first.');
   }
 
-  google.accounts.id.prompt(notification => {
-    if (notification.isNotDisplayed?.() || notification.isSkippedMoment?.()) {
-      _authCallbacks.onError?.('Google Sign-In popup could not be shown. Please disable popup blockers and try again.');
-    }
+  google.accounts.id.renderButton(container, {
+    type: 'standard',
+    theme: 'outline',
+    size: 'large',
+    shape: 'pill',
+    text: 'signin_with',
+    logo_alignment: 'left',
+    width: container.offsetWidth || 280,
   });
 }
 

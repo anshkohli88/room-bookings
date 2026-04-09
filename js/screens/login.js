@@ -1,5 +1,5 @@
 // js/screens/login.js
-import { initAuth, signIn } from '../auth.js';
+import { initAuth, renderGoogleButton } from '../auth.js';
 
 let _authReady = false;
 
@@ -13,6 +13,11 @@ export function renderLogin({ onSignInSuccess, onSignInError }) {
     function tryInit() {
       if (typeof google !== 'undefined' && google.accounts) {
         initAuth(onSignInSuccess, onSignInError);
+        const btnHost = document.getElementById('google-signin-host');
+        if (btnHost) {
+          btnHost.innerHTML = '';
+          renderGoogleButton(btnHost);
+        }
         _authReady = true;
       } else {
         setTimeout(tryInit, 200);
@@ -20,16 +25,6 @@ export function renderLogin({ onSignInSuccess, onSignInError }) {
     }
     tryInit();
 
-    document.getElementById('sign-in-btn')?.addEventListener('click', () => {
-      const errEl = document.getElementById('login-error');
-      if (errEl) errEl.textContent = '';
-      try {
-        if (!_authReady) throw new Error('Auth not ready');
-        signIn();
-      } catch {
-        if (errEl) errEl.textContent = 'Sign-in is not ready yet. Please wait a moment and try again.';
-      }
-    });
   };
 
   return `
@@ -37,10 +32,7 @@ export function renderLogin({ onSignInSuccess, onSignInError }) {
       <div class="login-logo">🏠</div>
       <div class="login-title">Room Bookings</div>
       <div class="login-sub">Chandigarh, India · 6 Rooms</div>
-      <button class="login-btn" id="sign-in-btn">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="24" height="24">
-        Sign in with Google
-      </button>
+      <div class="google-signin-host" id="google-signin-host"></div>
       <div class="login-error" id="login-error"></div>
     </div>
   `;
