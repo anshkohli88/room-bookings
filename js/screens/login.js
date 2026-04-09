@@ -1,6 +1,8 @@
 // js/screens/login.js
 import { initAuth, signIn } from '../auth.js';
 
+let _authReady = false;
+
 /**
  * Returns HTML for the login screen.
  * Sets window.__attachListeners for DOM event wiring after mount.
@@ -11,6 +13,7 @@ export function renderLogin({ onSignInSuccess, onSignInError }) {
     function tryInit() {
       if (typeof google !== 'undefined' && google.accounts) {
         initAuth(onSignInSuccess, onSignInError);
+        _authReady = true;
       } else {
         setTimeout(tryInit, 200);
       }
@@ -21,6 +24,7 @@ export function renderLogin({ onSignInSuccess, onSignInError }) {
       const errEl = document.getElementById('login-error');
       if (errEl) errEl.textContent = '';
       try {
+        if (!_authReady) throw new Error('Auth not ready');
         signIn();
       } catch {
         if (errEl) errEl.textContent = 'Sign-in is not ready yet. Please wait a moment and try again.';
