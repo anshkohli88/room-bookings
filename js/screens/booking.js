@@ -234,8 +234,9 @@ function _attachListeners() {
       _picker.viewMonth++;
       if (_picker.viewMonth > 11) { _picker.viewMonth = 0; _picker.viewYear++; }
       _refreshCal();
-    } else if (e.target.dataset.date) {
-      _onDayClick(e.target.dataset.date, e.target);
+    } else {
+      const dayEl = e.target.closest('[data-date]');
+      if (dayEl) _onDayClick(dayEl.dataset.date, dayEl);
     }
   });
 
@@ -302,6 +303,13 @@ function _refreshChips() {
     co.textContent = _picker.checkOut ? formatDateDisplay(_picker.checkOut) : 'Select date';
     co.classList.toggle('placeholder', !_picker.checkOut);
   }
+  // Update active state on the chip containers so the blue outline follows the current step
+  document.querySelectorAll('.date-chip').forEach((chip, i) => {
+    chip.classList.toggle('active',
+      (i === 0 && _picker.step === 0) ||
+      (i === 1 && _picker.step === 1)
+    );
+  });
 }
 
 function _updateBookedRanges() {
