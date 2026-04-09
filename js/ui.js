@@ -1,5 +1,13 @@
 // js/ui.js
 
+/**
+ * Escapes a value for safe insertion into HTML innerHTML.
+ * Use on all user-supplied strings (guest names, notes, etc.)
+ */
+export function esc(str) {
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 /** Shows a brief toast notification at the bottom of the screen. */
 export function showToast(message, type = 'success') {
   document.querySelector('.toast')?.remove();

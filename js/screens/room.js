@@ -1,5 +1,6 @@
 // js/screens/room.js
 import { parseDescription, formatDateDisplay } from '../model.js';
+import { esc } from '../ui.js';
 
 /**
  * Filters and sorts events for a specific room by check-in date.
@@ -23,12 +24,12 @@ export function renderRoom({ roomId, events, onBack, onAddBooking, onEditBooking
         const desc = parseDescription(ev.description || '');
         return `
           <div class="booking-item" data-event-id="${ev.id}">
-            <div class="booking-guest">${desc.guest || 'Unknown Guest'}</div>
+            <div class="booking-guest">${esc(desc.guest) || 'Unknown Guest'}</div>
             <div class="booking-dates">
               ${formatDateDisplay(ev.start?.date)} → ${formatDateDisplay(ev.end?.date)}
             </div>
             <div class="booking-meta">
-              <span class="booking-rent">₹${Number(desc.rent).toLocaleString('en-IN')}</span>
+              <span class="booking-rent">₹${Number(desc.rent || 0).toLocaleString('en-IN')}</span>
               <span class="payment-chip ${desc.payment === 'PAID' ? 'paid' : 'pending'}">
                 ${desc.payment === 'PAID' ? '✓ Paid' : '⏳ Pending'}
               </span>

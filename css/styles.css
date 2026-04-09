@@ -105,6 +105,8 @@ a { text-decoration: none; color: inherit; }
   display: flex; align-items: center; justify-content: center;
   font-size: 16px; color: white; font-weight: 700;
   border: 2px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  min-width: var(--min-tap); min-height: var(--min-tap);
 }
 .header-room-chip {
   display: inline-block;

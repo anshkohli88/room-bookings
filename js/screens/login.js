@@ -18,8 +18,13 @@ export function renderLogin({ onSignInSuccess, onSignInError }) {
     tryInit();
 
     document.getElementById('sign-in-btn')?.addEventListener('click', () => {
-      document.getElementById('login-error').textContent = '';
-      signIn();
+      const errEl = document.getElementById('login-error');
+      if (errEl) errEl.textContent = '';
+      try {
+        signIn();
+      } catch {
+        if (errEl) errEl.textContent = 'Sign-in is not ready yet. Please wait a moment and try again.';
+      }
     });
   };
 

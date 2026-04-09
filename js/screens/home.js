@@ -1,6 +1,6 @@
 // js/screens/home.js
 import { ROOMS, isOccupiedToday, parseDescription, formatDateDisplay, toDateStr } from '../model.js';
-import { avatarInitial, formatHeaderDate } from '../ui.js';
+import { avatarInitial, formatHeaderDate, esc } from '../ui.js';
 import { signOut } from '../auth.js';
 import { navigate } from '../app.js';
 
@@ -19,10 +19,10 @@ function buildRoomStatus(events) {
 
     const desc   = parseDescription(ev.description || '');
     const roomId = desc.room || (ev.summary || '').split(' · ')[0];
-    if (status.has(roomId)) {
+    if (status.has(roomId) && !status.get(roomId).occupied) {
       status.set(roomId, {
         occupied: true,
-        guest:    desc.guest || ev.summary?.split(' · ')[1] || 'Guest',
+        guest:    esc(desc.guest || ev.summary?.split(' · ')[1] || 'Guest'),
         checkOut: end,
       });
     }
@@ -53,7 +53,7 @@ export function renderHome({ events, user, onAddBooking, onRoomClick }) {
             <div class="status-badge ${s.occupied ? 'occupied' : 'free'}">
               ● ${s.occupied ? 'Occupied' : 'Free'}
             </div>
-            ${s.occupied ? `<div class="room-guest-info">${s.guest}<br>Till ${formatDateDisplay(s.checkOut)}</div>` : ''}
+            ${s.occupied ? `<div class="room-guest-info">${esc(s.guest)}<br>Till ${formatDateDisplay(s.checkOut)}</div>` : ''}
           </div>
         `;
       }).join('')}
