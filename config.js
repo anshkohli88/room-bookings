@@ -2,7 +2,7 @@
 // ⚠️  Fill in YOUR values before running the app
 const CONFIG = {
   // From Google Cloud Console → APIs & Services → Credentials
-  CLIENT_ID: '597616176875-47c0l0r74br63div0rauj3q46ggqphgf.apps.googleusercontent.com',
+  CLIENT_ID: '644357597182-ks2fs4v6d9p4pbkbi8edpub5ihroet00.apps.googleusercontent.com',
 
   // From Google Calendar → Settings → your shared calendar → Calendar ID
   CALENDAR_ID: 'anshkohli019@gmail.com',
