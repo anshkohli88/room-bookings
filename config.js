@@ -2,16 +2,16 @@
 // ⚠️  Fill in YOUR values before running the app
 const CONFIG = {
   // From Google Cloud Console → APIs & Services → Credentials
-  CLIENT_ID: 'YOUR_CLIENT_ID.apps.googleusercontent.com',
+  CLIENT_ID: '597616176875-47c0l0r74br63div0rauj3q46ggqphgf.apps.googleusercontent.com',
 
   // From Google Calendar → Settings → your shared calendar → Calendar ID
-  CALENDAR_ID: 'YOUR_CALENDAR_ID@group.calendar.google.com',
+  CALENDAR_ID: 'anshkohli019@gmail.com',
 
   // Gmail addresses of the 3 managers — only these can log in
   ALLOWED_EMAILS: [
-    'manager1@gmail.com',
-    'manager2@gmail.com',
-    'manager3@gmail.com',
+    'surinderkohli88@gmail.com',
+    'amitkohli18@gmail.com',
+    'anshkohli019@gmail.com',
   ],
 
   // How far ahead to fetch bookings (in days)
