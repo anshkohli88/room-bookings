@@ -1,0 +1,408 @@
+/* ============================================================
+   CSS DESIGN SYSTEM — Room Bookings App
+   Midnight Slate colour scheme
+   ============================================================ */
+
+:root {
+  /* Colours */
+  --col-header-start:  #0F172A;
+  --col-header-end:    #1E293B;
+  --col-primary:       #3B82F6;
+  --col-primary-hover: #2563EB;
+  --col-primary-light: #EFF6FF;
+  --col-free:          #10B981;
+  --col-free-light:    #ECFDF5;
+  --col-occupied:      #EF4444;
+  --col-occupied-light:#FEF2F2;
+  --col-bg:            #F8FAFC;
+  --col-card:          #FFFFFF;
+  --col-border:        #E2E8F0;
+  --col-text:          #0F172A;
+  --col-text-soft:     #64748B;
+  --col-white:         #FFFFFF;
+  --col-danger:        #EF4444;
+  --col-danger-light:  #FEE2E2;
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+
+  /* Sizes */
+  --radius-card:  14px;
+  --radius-input: 12px;
+  --radius-badge: 20px;
+  --radius-btn:   12px;
+  --min-tap:      48px;
+  --font-min:     18px;
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-body);
+  background: var(--col-bg);
+  color: var(--col-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: var(--font-body); cursor: pointer; border: none; background: none; }
+input, textarea, select { font-family: var(--font-body); }
+a { text-decoration: none; color: inherit; }
+
+/* ---- App Shell ---- */
+#app { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; }
+
+/* ---- Loading overlay ---- */
+.loading-overlay {
+  position: fixed; inset: 0;
+  background: var(--col-header-start);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  transition: opacity 0.3s;
+}
+.loading-overlay.hidden { opacity: 0; pointer-events: none; }
+
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid rgba(255,255,255,0.2);
+  border-top-color: var(--col-white);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---- Header ---- */
+.app-header {
+  background: linear-gradient(135deg, var(--col-header-start), var(--col-header-end));
+  padding: 16px 20px 20px;
+  position: sticky; top: 0; z-index: 10;
+}
+.app-header-row {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.app-header-title {
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 700;
+  color: var(--col-white);
+}
+.app-header-sub {
+  font-size: 13px; color: rgba(255,255,255,0.6);
+  margin-top: 2px;
+}
+.app-header-back {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: white;
+  min-width: var(--min-tap); min-height: var(--min-tap);
+}
+.app-header-avatar {
+  width: 38px; height: 38px;
+  background: var(--col-primary);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: white; font-weight: 700;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+.header-room-chip {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: var(--radius-badge);
+  padding: 3px 12px; font-size: 13px;
+  color: white; font-weight: 600; margin-top: 6px;
+}
+
+/* ---- Stats bar ---- */
+.stats-bar {
+  display: flex;
+  background: var(--col-header-end);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.stat-item {
+  flex: 1; padding: 10px 0; text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num { font-size: 22px; font-weight: 700; line-height: 1; }
+.stat-num.green { color: #34D399; }
+.stat-num.red   { color: #F87171; }
+.stat-num.blue  { color: #93C5FD; }
+.stat-label { font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; font-weight: 600; }
+
+/* ---- Screen body ---- */
+.screen-body { padding: 14px 14px 80px; }
+
+/* ---- Floor label ---- */
+.floor-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--col-text-soft);
+  margin: 14px 0 8px;
+}
+
+/* ---- Room grid ---- */
+.room-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 6px; }
+
+/* ---- Room card ---- */
+.room-card {
+  background: var(--col-card);
+  border-radius: var(--radius-card);
+  padding: 14px 12px 12px;
+  border: 2px solid var(--col-border);
+  position: relative; overflow: hidden;
+  min-height: var(--min-tap);
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.room-card:active { transform: scale(0.97); }
+.room-card.free    { border-color: var(--col-free); }
+.room-card.occupied { border-color: var(--col-occupied); }
+.room-card-bar {
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: var(--col-free);
+}
+.room-card.occupied .room-card-bar { background: var(--col-occupied); }
+.room-name {
+  font-family: var(--font-display);
+  font-size: 24px; font-weight: 900;
+  color: var(--col-text); line-height: 1;
+  margin-bottom: 6px;
+}
+.status-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: var(--radius-badge);
+}
+.status-badge.free     { background: var(--col-free-light);     color: var(--col-free); }
+.status-badge.occupied { background: var(--col-occupied-light); color: var(--col-occupied); }
+.room-guest-info { font-size: 12px; color: var(--col-text-soft); margin-top: 6px; font-weight: 500; line-height: 1.4; }
+
+/* ---- Primary button ---- */
+.btn-primary {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 16px;
+  background: var(--col-primary); color: white;
+  border-radius: var(--radius-btn); font-size: var(--font-min);
+  font-weight: 700; min-height: var(--min-tap);
+  box-shadow: 0 4px 14px rgba(59,130,246,0.35);
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-primary:active { background: var(--col-primary-hover); transform: scale(0.98); }
+.btn-icon {
+  width: 28px; height: 28px; background: rgba(255,255,255,0.25);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 20px; line-height: 1;
+}
+
+/* ---- Danger button ---- */
+.btn-danger {
+  width: 100%; padding: 14px;
+  background: var(--col-danger-light); color: var(--col-danger);
+  border-radius: var(--radius-btn); font-size: 16px;
+  font-weight: 700; min-height: var(--min-tap);
+  border: 2px solid var(--col-danger);
+  margin-top: 10px;
+}
+.btn-danger:active { background: var(--col-danger); color: white; }
+
+/* ---- Add button footer (fixed at bottom) ---- */
+.btn-footer {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  padding: 12px 14px;
+  background: var(--col-bg);
+  border-top: 1px solid var(--col-border);
+}
+
+/* ---- Booking list item ---- */
+.booking-item {
+  background: var(--col-card);
+  border-radius: var(--radius-card);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border: 1px solid var(--col-border);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  cursor: pointer;
+  min-height: var(--min-tap);
+}
+.booking-item:active { background: #F1F5F9; }
+.booking-guest { font-size: var(--font-min); font-weight: 700; color: var(--col-text); }
+.booking-dates { font-size: 14px; color: var(--col-text-soft); margin-top: 4px; }
+.booking-meta  {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 8px; flex-wrap: wrap;
+}
+.booking-rent  { font-size: 15px; font-weight: 700; color: var(--col-text); }
+.payment-chip  {
+  font-size: 11px; font-weight: 700; padding: 3px 10px;
+  border-radius: var(--radius-badge); text-transform: uppercase;
+}
+.payment-chip.paid    { background: var(--col-free-light);     color: var(--col-free); }
+.payment-chip.pending { background: #FEF3C7;                   color: #D97706; }
+.empty-state {
+  text-align: center; padding: 48px 20px;
+  color: var(--col-text-soft); font-size: var(--font-min);
+}
+
+/* ---- Form fields ---- */
+.field-group { margin-bottom: 16px; }
+.field-label {
+  display: block; font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--col-text-soft); margin-bottom: 6px;
+}
+.field-input {
+  width: 100%; padding: 14px 16px;
+  background: var(--col-card); color: var(--col-text);
+  border: 2px solid var(--col-border); border-radius: var(--radius-input);
+  font-size: var(--font-min); min-height: var(--min-tap);
+  transition: border-color 0.15s;
+}
+.field-input:focus { outline: none; border-color: var(--col-primary); }
+.field-input::placeholder { color: #CBD5E1; }
+select.field-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748B' stroke-width='2' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+textarea.field-input { resize: vertical; min-height: 80px; }
+
+/* ---- Payment toggle ---- */
+.payment-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.payment-opt {
+  padding: 14px; text-align: center;
+  border: 2px solid var(--col-border); border-radius: var(--radius-input);
+  cursor: pointer; min-height: var(--min-tap);
+  transition: all 0.15s;
+}
+.payment-opt-icon { font-size: 22px; }
+.payment-opt-label { font-size: 14px; font-weight: 700; margin-top: 4px; color: var(--col-text-soft); }
+.payment-opt.selected-paid    { border-color: var(--col-free);     background: var(--col-free-light); }
+.payment-opt.selected-paid .payment-opt-label    { color: var(--col-free); }
+.payment-opt.selected-pending { border-color: #F59E0B; background: #FEF3C7; }
+.payment-opt.selected-pending .payment-opt-label { color: #D97706; }
+
+/* ---- Date picker ---- */
+.date-chips { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.date-chip {
+  padding: 12px 14px; border-radius: var(--radius-input);
+  border: 2px solid var(--col-border); background: var(--col-card);
+}
+.date-chip.active { border-color: var(--col-primary); background: var(--col-primary-light); }
+.date-chip-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--col-text-soft); }
+.date-chip-value { font-size: 15px; font-weight: 700; color: var(--col-text); margin-top: 2px; }
+.date-chip-value.placeholder { color: #CBD5E1; font-weight: 400; }
+
+.mini-cal {
+  background: var(--col-card);
+  border: 2px solid var(--col-primary);
+  border-radius: var(--radius-card); overflow: hidden;
+  margin-bottom: 16px;
+}
+.cal-header {
+  background: linear-gradient(135deg, var(--col-header-start), var(--col-header-end));
+  color: white; padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-weight: 700; font-size: 16px;
+}
+.cal-nav {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; cursor: pointer; min-height: var(--min-tap);
+}
+.cal-grid { padding: 12px; }
+.cal-weekdays {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  text-align: center; font-size: 11px; font-weight: 700;
+  color: var(--col-text-soft); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 8px;
+}
+.cal-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.cal-day {
+  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 500; border-radius: 50%; cursor: pointer;
+  min-height: 36px; transition: background 0.1s;
+}
+.cal-day:empty { cursor: default; }
+.cal-day.other-month { color: #CBD5E1; cursor: default; }
+.cal-day.today        { background: var(--col-primary); color: white; font-weight: 700; }
+.cal-day.check-in     { background: #1D4ED8; color: white; font-weight: 700; border-radius: 50% 0 0 50%; }
+.cal-day.check-out    { background: #1D4ED8; color: white; font-weight: 700; border-radius: 0 50% 50% 0; }
+.cal-day.in-range     { background: var(--col-primary-light); color: #1D4ED8; font-weight: 600; border-radius: 0; }
+.cal-day.check-in.check-out { border-radius: 50%; }
+.cal-day.booked       { background: var(--col-occupied-light); color: var(--col-occupied); cursor: not-allowed; font-size: 12px; text-decoration: line-through; }
+.cal-day.past         { color: #CBD5E1; cursor: not-allowed; }
+.cal-day:not(.booked):not(.past):not(.today):not(.other-month):not(:empty):hover { background: #E2E8F0; }
+
+.cal-instruction { text-align: center; font-size: 14px; color: var(--col-text-soft); margin-bottom: 8px; font-weight: 500; }
+
+/* ---- Toast ---- */
+.toast {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+  padding: 14px 24px; border-radius: var(--radius-card);
+  font-size: 16px; font-weight: 600; color: white;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 900;
+  animation: toastIn 0.25s ease, toastOut 0.25s ease 2.5s forwards;
+  white-space: nowrap;
+}
+.toast.success { background: var(--col-free); }
+.toast.error   { background: var(--col-danger); }
+@keyframes toastIn  { from { opacity:0; transform: translateX(-50%) translateY(20px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
+@keyframes toastOut { from { opacity:1; } to { opacity:0; } }
+
+/* ---- Confirm dialog ---- */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 800; padding: 20px;
+}
+.dialog {
+  background: var(--col-card); border-radius: var(--radius-card);
+  padding: 28px 24px; width: 100%; max-width: 340px; text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.dialog-title  { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+.dialog-body   { font-size: var(--font-min); color: var(--col-text-soft); margin-bottom: 24px; }
+.dialog-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dialog-btn {
+  padding: 14px; border-radius: var(--radius-btn);
+  font-size: 16px; font-weight: 700; min-height: var(--min-tap);
+}
+.dialog-btn.cancel  { background: var(--col-bg); color: var(--col-text-soft); border: 2px solid var(--col-border); }
+.dialog-btn.confirm { background: var(--col-danger); color: white; }
+
+/* ---- Success flash ---- */
+.success-flash {
+  position: fixed; inset: 0; background: var(--col-free);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 950; color: white;
+  animation: flashOut 0.4s ease 1.8s forwards;
+}
+.success-flash-icon  { font-size: 72px; margin-bottom: 16px; }
+.success-flash-text  { font-family: var(--font-display); font-size: 28px; font-weight: 700; }
+@keyframes flashOut { to { opacity: 0; pointer-events: none; } }
+
+/* ---- Login screen ---- */
+.login-screen {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: linear-gradient(160deg, var(--col-header-start) 0%, #1E3A5F 100%);
+  padding: 40px 32px; text-align: center;
+}
+.login-logo   { font-size: 64px; margin-bottom: 20px; }
+.login-title  { font-family: var(--font-display); font-size: 32px; font-weight: 900; color: white; margin-bottom: 8px; }
+.login-sub    { font-size: 16px; color: rgba(255,255,255,0.6); margin-bottom: 48px; }
+.login-btn {
+  display: flex; align-items: center; gap: 12px;
+  background: white; color: var(--col-text);
+  padding: 16px 28px; border-radius: var(--radius-card);
+  font-size: var(--font-min); font-weight: 700;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  min-height: var(--min-tap);
+  transition: transform 0.1s;
+}
+.login-btn:active { transform: scale(0.97); }
+.login-btn img { width: 24px; height: 24px; }
+.login-error { color: #FCA5A5; font-size: 15px; margin-top: 20px; font-weight: 500; }
